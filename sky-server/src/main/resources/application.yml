@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+
+spring:
+#  启用哪一个环境配置
+  profiles:
+    active: dev
+
+    #开启循环依赖
+  main:
+    allow-circular-references: true
+
+  #配置数据源
+  datasource:
+    druid:
+      driver-class-name: ${sky.datasource.driver-class-name}
+      url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${sky.datasource.username}
+      password: ${sky.datasource.password}
+
+
+
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  #xml文件写result type的时候不需要写包名了，可以只写类名
+  type-aliases-package: com.sky.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+
+
+logging:
+  level:
+    com:
+      sky:
+        mapper: debug # mybatis日志，显示SQL语句，不需要配置mybatis.configuration.log-impl了
+        service: info
+        controller: info
+
+sky:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    admin-secret-key: itcast
+    # 设置jwt过期时间：2小时
+    admin-ttl: 7200000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: token
