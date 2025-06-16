@@ -89,6 +89,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     /**
+     * 启用禁用员工
+     * @param status
+     * @param id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+
+        employeeMapper.startOrStop(status, id);
+
+    }
+
+
+    /**
      * 员工登录
      *
      * @param employeeLoginDTO
