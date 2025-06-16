@@ -50,11 +50,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employee.setStatus(StatusConstant.ENABLE);
 
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
-
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+        // employee.setCreateUser(BaseContext.getCurrentId());
+        // employee.setUpdateUser(BaseContext.getCurrentId());
+        //
+        // employee.setCreateTime(LocalDateTime.now());
+        // employee.setUpdateTime(LocalDateTime.now());
 
         String md5password = DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes());
         employee.setPassword(md5password);
@@ -95,9 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void startOrStop(Integer status, Long id) {
-
         employeeMapper.startOrStop(status, id);
-
     }
 
 
@@ -120,10 +118,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void update(Employee employee) {
 
-        //更新人id
-        employee.setUpdateUser(BaseContext.getCurrentId());
-        //更新时间
-        employee.setUpdateTime(LocalDateTime.now());
+        // //更新人id
+        // employee.setUpdateUser(BaseContext.getCurrentId());
+        // //更新时间
+        // employee.setUpdateTime(LocalDateTime.now());
 
         employeeMapper.update(employee);
 

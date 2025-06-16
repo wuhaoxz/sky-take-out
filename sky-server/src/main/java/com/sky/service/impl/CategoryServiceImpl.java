@@ -7,21 +7,22 @@ import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
-import com.sky.entity.Setmeal;
 import com.sky.exception.BaseException;
 import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
+
+import com.sky.service.CategoryService;
+import com.sky.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryMapper categoryMapper;
@@ -45,6 +46,7 @@ public class CategoryServiceImpl implements CategoryService{
         return pageResult;
     }
 
+
     @Override
     public void startOrStop(Integer status, Long id) {
         categoryMapper.startOrStop(status,id);
@@ -57,8 +59,8 @@ public class CategoryServiceImpl implements CategoryService{
         Category category = new Category();
         BeanUtils.copyProperties(categoryDTO,category);
 
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
+        // category.setUpdateTime(LocalDateTime.now());
+        // category.setUpdateUser(BaseContext.getCurrentId());
 
         categoryMapper.update(category);
     }
@@ -69,10 +71,10 @@ public class CategoryServiceImpl implements CategoryService{
         Category category = new Category();
         category.setId(null);
         BeanUtils.copyProperties(categoryDTO,category);
-        category.setCreateUser(BaseContext.getCurrentId());
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
-        category.setUpdateTime(LocalDateTime.now());
+        // category.setCreateUser(BaseContext.getCurrentId());
+        // category.setCreateTime(LocalDateTime.now());
+        // category.setUpdateUser(BaseContext.getCurrentId());
+        // category.setUpdateTime(LocalDateTime.now());
         category.setStatus(StatusConstant.DISABLE);
 
         categoryMapper.save(category);
