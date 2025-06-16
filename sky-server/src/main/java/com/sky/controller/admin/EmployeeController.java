@@ -39,6 +39,35 @@ public class EmployeeController {
     private JwtProperties jwtProperties;
 
 
+    /**
+     *根据id查询员工
+     * @param id
+     * @return
+     */
+    @ApiOperation("根据id查询员工")
+    @GetMapping("{id}")
+    public Result<Employee> getById(@PathVariable Long id){
+        log.info("根据id查询员工:{}",id);
+        Employee employee = employeeService.getById(id);
+
+        return Result.success(employee);
+    }
+
+
+    /**
+     * 编辑员工
+     * @param employee
+     * @return
+     */
+    @ApiOperation("编辑员工")
+    @PutMapping
+    public Result update(@RequestBody Employee employee){
+
+        employeeService.update(employee);
+
+        return Result.success();
+    }
+
 
     /**
      * 启用禁用员工

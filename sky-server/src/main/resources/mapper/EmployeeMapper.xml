@@ -4,10 +4,28 @@
 <mapper namespace="com.sky.mapper.EmployeeMapper">
 
 
+
+
+
+
+    <update id="update" parameterType="com.sky.entity.Employee">
+        update employee
+        <set>
+            <if test="idNumber!=null">id_number = #{idNumber},</if>
+            <if test="name!=null">name = #{name},</if>
+            <if test="phone!=null">phone = #{phone},</if>
+            <if test="sex!=null">sex = #{sex},</if>
+            <if test="username!=null">username = #{username},</if>
+            <if test="updateTime!=null">update_time = #{updateTime},</if>
+            <if test="updateUser!=null">update_user = #{updateUser},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+
     <select id="pageQuery" parameterType="com.sky.dto.EmployeePageQueryDTO" resultType="com.sky.entity.Employee">
         select * from employee
         <where>
-
         <if test="name != null and name != ''">
              and name like concat('%',#{name},'%')
         </if>
