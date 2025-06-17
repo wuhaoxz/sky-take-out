@@ -9,6 +9,7 @@ import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.io.ResolverUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisServer;
@@ -52,6 +53,39 @@ public class DishController {
 
         return Result.success();
     }
+
+    @ApiOperation("根据id查询菜品")
+    @GetMapping("/{id}")
+    public Result<DishVO> getById(@PathVariable Long id){
+
+        DishVO dishVO = dishService.getById(id);
+
+        return  Result.success(dishVO);
+    }
+
+
+
+    @ApiOperation("修改菜品")
+    @PutMapping
+    public Result update(@RequestBody DishDTO dishDTO){
+        dishService.update(dishDTO);
+        return Result.success();
+    }
+
+
+    @ApiOperation("起售停售菜品")
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status, Long id){
+
+        dishService.startOrStop(status,id);
+
+        return Result.success();
+    }
+
+
+
+
+
 
 
 }

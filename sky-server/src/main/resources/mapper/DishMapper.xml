@@ -4,6 +4,23 @@
 <mapper namespace="com.sky.mapper.DishMapper">
 
 
+
+
+    <update id="update">
+        update dish
+        <set>
+            <if test="categoryId!= null"> category_id = #{categoryId},</if>
+            <if test="description!= null"> description = #{description},</if>
+            <if test="image!= null"> image = #{image},</if>
+            <if test="name!= null"> name = #{name},</if>
+            <if test="price!= null"> price = #{price},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+
     <delete id="deleteBatch">
         delete from dish where id in
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
