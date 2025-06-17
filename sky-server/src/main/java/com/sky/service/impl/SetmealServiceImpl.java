@@ -90,4 +90,9 @@ public class SetmealServiceImpl implements SetmealService {
         setmealVO.setSetmealDishes(setmealDishes);
         return setmealVO;
     }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        setmealMapper.startOrStop(status,id);
+    }
 }
