@@ -122,4 +122,17 @@ public class SetmealServiceImpl implements SetmealService {
         });
         setmealDishMapper.saveBatch(setmealDishes);
     }
+
+
+
+    @Transactional
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        //1.删除setmeal中的数据
+        setmealMapper.deleteByIds(ids);
+
+
+        //2.删除setmeal_dish表中的数据
+        setmealDishMapper.deleteBySetmealIds(ids);
+    }
 }

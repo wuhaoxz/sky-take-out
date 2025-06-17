@@ -12,4 +12,12 @@
         </foreach>
 
     </insert>
+
+
+    <delete id="deleteBySetmealIds">
+        delete from setmeal_dish where setmeal_id in
+        <foreach collection="ids" separator="," open="(" close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

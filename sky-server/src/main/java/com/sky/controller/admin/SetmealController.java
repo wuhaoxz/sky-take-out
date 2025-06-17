@@ -11,8 +11,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(tags = "套餐相关接口")
 @Slf4j
@@ -73,6 +76,16 @@ public class SetmealController {
     public Result update(@RequestBody SetmealDTO setmealDTO){
 
         setmealService.update(setmealDTO);
+
+        return Result.success();
+    }
+
+
+    @ApiOperation("批量删除套餐")
+    @DeleteMapping
+    public Result deleteByIds(@RequestParam List<Integer> ids){
+
+        setmealService.deleteByIds(ids);
 
         return Result.success();
     }

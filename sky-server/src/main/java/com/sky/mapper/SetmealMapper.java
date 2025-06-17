@@ -9,6 +9,8 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface SetmealMapper {
 
@@ -42,4 +44,7 @@ public interface SetmealMapper {
 
     @AutoFill(OperationType.UPDATE)
     void update(Setmeal setmeal);
+
+
+    void deleteByIds(List<Integer> ids);
 }
