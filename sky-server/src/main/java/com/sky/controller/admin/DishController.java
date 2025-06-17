@@ -11,7 +11,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.io.ResolverUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisServer;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/dish")
@@ -36,6 +39,18 @@ public class DishController {
     public Result<PageResult> page(DishPageQueryDTO dto){
         PageResult pageResult = dishService.page(dto);
         return Result.success(pageResult);
+    }
+
+
+
+    @ApiOperation("批量删除菜品")
+    @DeleteMapping
+    public Result deleteBatch(@RequestParam("ids") List<Long> ids){
+
+        dishService.deleteBatch(ids);
+
+
+        return Result.success();
     }
 
 

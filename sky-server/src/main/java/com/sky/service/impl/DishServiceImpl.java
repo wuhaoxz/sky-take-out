@@ -8,6 +8,7 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.exception.BaseException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
@@ -32,6 +33,8 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+
+
 
 
     @Transactional
@@ -77,6 +80,35 @@ public class DishServiceImpl implements DishService {
 
         PageResult pageResult = new PageResult(page.getTotal(), page.getResult());
         return pageResult;
+    }
+
+    @Transactional
+    @Override
+    public void deleteBatch(List<Long> ids) {
+
+        //如果有的菜品处于起售，不能删除
+        //获得起售中的菜品的数量
+        Integer count = dishMapper.countStart(ids);
+        if(count>0){
+            throw new BaseException("删除失败，存在起售中的菜品");
+        }
+
+
+
+        //TODO 如果菜品关联了套餐，则不允许删除
+
+
+
+
+
+        //删除菜品
+        dishMapper.deleteBatch(ids);
+
+        //删除对应的口味
+        dishFlavorMapper.deleteBatch(ids);
+
+
+
     }
 
 

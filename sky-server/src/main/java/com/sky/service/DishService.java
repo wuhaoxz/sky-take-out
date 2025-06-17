@@ -6,9 +6,13 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 public interface DishService {
     void save(DishDTO dishDTO);
 
     PageResult page(DishPageQueryDTO dto);
+
+    void deleteBatch(List<Long> ids);
 }

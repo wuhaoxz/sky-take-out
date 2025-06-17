@@ -13,4 +13,5 @@ public interface DishFlavorMapper {
     void saveBatch(List<DishFlavor> flavors);
 
 
+    void deleteBatch(List<Long> ids);
 }

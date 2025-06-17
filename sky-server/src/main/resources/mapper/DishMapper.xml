@@ -4,6 +4,14 @@
 <mapper namespace="com.sky.mapper.DishMapper">
 
 
+    <delete id="deleteBatch">
+        delete from dish where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+
     <select id="page" resultType="com.sky.vo.DishVO">
 
         select dish.*, category.name categoryName from dish left join category on dish.category_id = category.id
@@ -15,4 +23,18 @@
 
         order by dish.create_time desc
     </select>
+
+
+
+    <select id="countStart" resultType="java.lang.Integer">
+        select count(*) from dish where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+        and status = 1
+    </select>
+
+
+
+
 </mapper>
