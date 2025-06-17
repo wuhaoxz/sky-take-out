@@ -27,6 +27,17 @@ public class DishController {
     private DishService dishService;
 
 
+    @ApiOperation("根据分类id查询菜品")
+    @GetMapping("list")
+    public Result<List<Dish>> getByCategoryId(Integer categoryId){
+
+        List<Dish> list =  dishService.getByCategoryId(categoryId);
+
+        return Result.success(list);
+    }
+
+
+
     @ApiOperation("新增菜品")
     @PostMapping
     public Result save(@RequestBody DishDTO dishDTO){
