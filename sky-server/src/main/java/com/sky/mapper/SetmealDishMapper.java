@@ -27,4 +27,6 @@ public interface SetmealDishMapper {
 
 
     void deleteBySetmealIds(List<Integer> ids);
+
+    Integer countByDishIds(List<Long> ids);
 }

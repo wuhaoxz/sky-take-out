@@ -20,4 +20,16 @@
             #{id}
         </foreach>
     </delete>
+
+
+
+    <select id="countByDishIds" resultType="java.lang.Integer">
+
+        select count(*) from setmeal_dish where dish_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+
+
+    </select>
 </mapper>

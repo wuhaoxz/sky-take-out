@@ -11,6 +11,7 @@ import com.sky.entity.DishFlavor;
 import com.sky.exception.BaseException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -34,6 +35,8 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
 
+    @Autowired
+    private SetmealDishMapper setmealDishMapper;
 
 
 
@@ -95,7 +98,12 @@ public class DishServiceImpl implements DishService {
 
 
 
-        //TODO 如果菜品关联了套餐，则不允许删除
+
+        //查询setmel_dish表，如果有此菜品，则不能删除
+        Integer count1 = setmealDishMapper.countByDishIds(ids);
+        if(count1>0){
+            throw new BaseException("删除失败，存在关联的套餐");
+        }
 
 
 
