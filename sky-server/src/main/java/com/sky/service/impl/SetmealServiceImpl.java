@@ -13,6 +13,7 @@ import com.sky.service.SetmealService;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,5 +95,31 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public void startOrStop(Integer status, Long id) {
         setmealMapper.startOrStop(status,id);
+    }
+
+
+
+
+    @Transactional
+    @Override
+    public void update(SetmealDTO setmealDTO) {
+        //1.修改setmeal表
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO,setmeal);
+
+        setmealMapper.update(setmeal);
+
+        //2.删除setmel_dish表中相关的数据
+        setmealDishMapper.deleteBySetmealId(setmealDTO.getId());
+
+        //3.向setmel_dish中新增数据
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealDishes.forEach(new Consumer<SetmealDish>() {
+            @Override
+            public void accept(SetmealDish setmealDish) {
+                setmealDish.setSetmealId(setmealDTO.getId());
+            }
+        });
+        setmealDishMapper.saveBatch(setmealDishes);
     }
 }

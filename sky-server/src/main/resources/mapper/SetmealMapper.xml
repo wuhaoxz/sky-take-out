@@ -4,14 +4,28 @@
 <mapper namespace="com.sky.mapper.SetmealMapper">
 
 
+    <update id="update">
+        update setmeal
+        <set>
+            <if test="categoryId != null">category_id = #{categoryId}, </if>
+            <if test="name != null">name = #{name} ,</if>
+            <if test="description != null">description = #{description}, </if>
+            <if test="image != null">image = #{image} ,</if>
+            <if test="price != null">price = #{price} </if>
+        </set>
+        where id = #{id}
+
+
+    </update>
+
+
     <select id="page" resultType="com.sky.vo.SetmealVO">
         select s.*, c.name categoryName from setmeal s left join category c on s.category_id = c.id
         <where>
-            <if test="name!=null">and s.name like concat('%',nae,'%')</if>
+            <if test="name!=null">s.name like concat('%',nae,'%')</if>
             <if test="status!=null">and s.status = status</if>
             <if test="categoryId!=null">and s.category_id = categoryId</if>
         </where>
         order by update_time desc
-
     </select>
 </mapper>
