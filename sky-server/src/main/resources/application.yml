@@ -19,7 +19,11 @@ spring:
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
 
-
+  #上传/请求 文件的最大大小
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 
 mybatis:
@@ -40,6 +44,7 @@ logging:
         service: info
         controller: info
 
+
 sky:
   jwt:
     # 设置jwt签名加密时使用的秘钥
@@ -48,3 +53,10 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+
+    #阿里oss配置
+    alioss:
+      bucket-name: ${sky.alioss.bucket-name}
+      endpoint: ${sky.alioss.endpoint}
+      access-key-id: ${sky.alioss.access-key-id}
+      access-key-secret: ${sky.alioss.access-key-secret}
