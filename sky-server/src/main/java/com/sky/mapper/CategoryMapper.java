@@ -7,6 +7,8 @@ import com.sky.entity.Category;
 import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface CategoryMapper {
 
@@ -32,4 +34,8 @@ public interface CategoryMapper {
 
     @Delete("delete from category where id = #{id}")
     void deleteById(Long id);
+
+
+    @Select("select * from category where type = #{type} and status = 1 order by sort asc,create_time desc")
+    List<Category> list(Integer type);
 }
