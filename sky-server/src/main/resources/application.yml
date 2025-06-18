@@ -25,6 +25,13 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
+  #redis配置信息
+  redis:
+    database: ${sky.redis.database}
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password: ${sky.redis.password}
+
 
 mybatis:
   #mapper配置文件
@@ -60,3 +67,4 @@ sky:
       endpoint: ${sky.alioss.endpoint}
       access-key-id: ${sky.alioss.access-key-id}
       access-key-secret: ${sky.alioss.access-key-secret}
+
