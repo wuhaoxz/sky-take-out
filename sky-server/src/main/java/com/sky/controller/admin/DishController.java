@@ -29,7 +29,7 @@ public class DishController {
 
     @ApiOperation("根据分类id查询菜品")
     @GetMapping("list")
-    public Result<List<Dish>> getByCategoryId(Integer categoryId){
+    public Result<List<Dish>> getByCategoryId(Long categoryId){
 
         List<Dish> list =  dishService.getByCategoryId(categoryId);
 

@@ -33,14 +33,14 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
 
 
         //1、从请求头中获取令牌
-        String token = request.getHeader(jwtProperties.getAdminTokenName());
+        String token = request.getHeader(jwtProperties.getUserTokenName());
 
         //2、校验令牌
         try {
 
             log.info("jwt校验:{}", token);
-            Claims claims = JwtUtil.parseJWT(jwtProperties.getUserTokenName(), token);//获取负载
-            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());//获取id
+            Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);//获取负载
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());//获取id
             log.info("当前请求的小程序端用户的id: {}", userId);
 
             BaseContext.setCurrentId(userId);

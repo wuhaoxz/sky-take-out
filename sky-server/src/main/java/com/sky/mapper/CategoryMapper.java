@@ -36,6 +36,6 @@ public interface CategoryMapper {
     void deleteById(Long id);
 
 
-    @Select("select * from category where type = #{type} and status = 1 order by sort asc,create_time desc")
+
     List<Category> list(Integer type);
 }
