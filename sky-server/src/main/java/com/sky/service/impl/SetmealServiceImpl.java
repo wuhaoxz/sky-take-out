@@ -10,6 +10,7 @@ import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.BeanUtils;
@@ -134,5 +135,26 @@ public class SetmealServiceImpl implements SetmealService {
 
         //2.删除setmeal_dish表中的数据
         setmealDishMapper.deleteBySetmealIds(ids);
+    }
+
+    @Override
+    public List<Setmeal> getByCategoryId(Long categoryId) {
+
+        List<Setmeal> list = setmealMapper.getByCategoryId(categoryId);
+
+
+        return list;
+    }
+
+    @Override
+    public List<DishItemVO> getBySetMealIdWithDishInfo(Long setmealId) {
+
+        //查询setmel_dish表，找到该套餐对应的那些菜品
+        // List<SetmealDish> setmealDishList = setmealDishMapper.getBySetMealId(setmealId);
+
+        List<DishItemVO> list = setmealDishMapper.getBySetMealIdWithDishInfo(setmealId);
+
+
+        return list;
     }
 }

@@ -22,7 +22,7 @@ public class DishController {
     private DishService dishService;
 
 
-    @ApiOperation("根据分类id查询菜品信息")
+    @ApiOperation("根据分类id查询菜品及口味")
     @GetMapping("/list")
     public Result<List<DishVO>> getByCategoryId(Long categoryId){
 

@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
             user.setOpenid(openid);
             user.setCreateTime(LocalDateTime.now());
             user.setName(openid.substring(0,5));
-            userMapper.save(user);
+            userMapper.save(user);//mapper中设置主键返回
         }
 
         //返回user

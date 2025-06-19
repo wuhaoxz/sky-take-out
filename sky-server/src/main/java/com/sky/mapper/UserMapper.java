@@ -10,10 +10,12 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface UserMapper {
 
-    @Options(useGeneratedKeys = true,keyProperty = "id")
+
     @Select("select * from user where openid = #{openid}")
     User getByOpenid(String openid);
 
+    // 主键返回
+    @Options(useGeneratedKeys = true,keyProperty = "id")
     @Insert("insert into user (openid, name,create_time) values (#{openid},#{name},#{createTime})")
     void save(User user1);
 }
