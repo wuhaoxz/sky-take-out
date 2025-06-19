@@ -54,6 +54,7 @@ logging:
 
 sky:
   jwt:
+    # 管理端jwt配置
     # 设置jwt签名加密时使用的秘钥
     admin-secret-key: itcast
     # 设置jwt过期时间：2小时
@@ -61,10 +62,21 @@ sky:
     # 设置前端传递过来的令牌名称
     admin-token-name: token
 
-    #阿里oss配置
-    alioss:
-      bucket-name: ${sky.alioss.bucket-name}
-      endpoint: ${sky.alioss.endpoint}
-      access-key-id: ${sky.alioss.access-key-id}
-      access-key-secret: ${sky.alioss.access-key-secret}
+    # 小程序端jwt配置
+    user-secret-key: itcast
+    user-ttl: 7200000
+    user-token-name: authentication
 
+
+
+  #阿里oss配置
+  alioss:
+    bucket-name: ${sky.alioss.bucket-name}
+    endpoint: ${sky.alioss.endpoint}
+    access-key-id: ${sky.alioss.access-key-id}
+    access-key-secret: ${sky.alioss.access-key-secret}
+
+  #小程序的appid和secret配置
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}
