@@ -13,9 +13,11 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.io.ResolverUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisServer;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/dish")
@@ -25,6 +27,9 @@ public class DishController {
 
     @Autowired
     private DishService dishService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @ApiOperation("根据分类id查询菜品")
@@ -41,6 +46,12 @@ public class DishController {
     @ApiOperation("新增菜品")
     @PostMapping
     public Result save(@RequestBody DishDTO dishDTO){
+
+        //新增的时候，因为只会改变一个分类下的菜品信息
+        // 所以只需要删一个分类下的菜品信息即可
+        redisTemplate.delete("dish_"+dishDTO.getCategoryId());
+
+
         dishService.save(dishDTO);
         return Result.success();
     }
@@ -59,8 +70,13 @@ public class DishController {
     @DeleteMapping
     public Result deleteBatch(@RequestParam("ids") List<Long> ids){
 
-        dishService.deleteBatch(ids);
+        //因为可能存在批量删除，所以需要删除所有的分类
+        //获得所有以dish_开头的key,然后全部删除
+        Set keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
 
+
+        dishService.deleteBatch(ids);
 
         return Result.success();
     }
@@ -79,6 +95,13 @@ public class DishController {
     @ApiOperation("修改菜品")
     @PutMapping
     public Result update(@RequestBody DishDTO dishDTO){
+
+        //因为可能改动两个分类（由一个分类改成另一个分类），所以全部删
+        //获得所有以dish_开头的key,然后全部删除
+        Set keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
+
+
         dishService.update(dishDTO);
         return Result.success();
     }
@@ -87,6 +110,12 @@ public class DishController {
     @ApiOperation("起售停售菜品")
     @PostMapping("/status/{status}")
     public Result startOrStop(@PathVariable Integer status, Long id){
+
+
+        //因为难以获得分类id，所以删除所有的分类
+        //获得所有以dish_开头的key,然后全部删除
+        Set keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
 
         dishService.startOrStop(status,id);
 

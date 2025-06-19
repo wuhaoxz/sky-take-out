@@ -13,6 +13,7 @@ import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,6 +39,9 @@ public class SetmealController {
         return Result.success(pageResult);
     }
 
+
+    //清理指定分类下的套餐的缓存
+    @CacheEvict(cacheNames = "setmeal" ,key = "#setmealDTO.categoryId")
     @ApiOperation("新增套餐")
     @PostMapping
     public Result save(@RequestBody SetmealDTO setmealDTO){
@@ -59,10 +63,11 @@ public class SetmealController {
         return Result.success(setmealVO);
     }
 
-
+    //不好拿categoryId，因此全部清理
+    @CacheEvict(cacheNames = "setmeal" ,allEntries = true)
     @ApiOperation("起售/停售套餐")
     @PostMapping("status/{status}")
-    public Result startOrStop(@PathVariable Integer status,Long id){
+    public Result startOrStop(@PathVariable Integer status, Long id){
 
             setmealService.startOrStop(status,id);
 
@@ -71,6 +76,7 @@ public class SetmealController {
 
 
 
+    @CacheEvict(cacheNames = "setmeal" ,allEntries = true)
     @ApiOperation("修改套餐")
     @PutMapping
     public Result update(@RequestBody SetmealDTO setmealDTO){
@@ -81,6 +87,7 @@ public class SetmealController {
     }
 
 
+    @CacheEvict(cacheNames = "setmeal" ,allEntries = true)
     @ApiOperation("批量删除套餐")
     @DeleteMapping
     public Result deleteByIds(@RequestParam List<Integer> ids){
