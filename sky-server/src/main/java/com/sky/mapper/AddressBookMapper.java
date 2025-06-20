@@ -25,4 +25,7 @@ public interface AddressBookMapper {
 
     @Select("select * from address_book where user_id = #{userId} and is_default = 1")
     AddressBook getDefaultByUserId(Long userId);
+
+    @Select("select * from address_book where id = #{id}")
+    AddressBook getById(Long id);
 }

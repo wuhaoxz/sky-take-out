@@ -69,4 +69,10 @@ public class AddressBookServiceImpl implements AddressBookService {
         AddressBook addressBook = addressBookMapper.getDefaultByUserId(userId);
         return addressBook;
     }
+
+    @Override
+    public AddressBook getById(Long id) {
+        AddressBook addressBook = addressBookMapper.getById(id);
+        return addressBook;
+    }
 }
