@@ -10,6 +10,7 @@ import com.sky.mapper.SetmealMapper;
 import com.sky.mapper.ShoppingCartMapper;
 import com.sky.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             //如果购物车中已经存在这个菜品，就直接增加数量即可
             if(cart!=null){
                 cart.setNumber(cart.getNumber()+1);
-                shoppingCartMapper.update(cart);
+                shoppingCartMapper.updateNumber(cart);
                 return;
             }
             //如果不存在
@@ -80,7 +81,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             //如果购物车中已经存在这个套餐，就直接增加数量即可
             if(cart!=null){
                 cart.setNumber(cart.getNumber()+1);
-                shoppingCartMapper.update(cart);
+                shoppingCartMapper.updateNumber(cart);
                 return;
             }
 
@@ -114,5 +115,37 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return list;
 
 
+    }
+
+    @Override
+    public void deleteOne(ShoppingCartDTO shoppingCartDTO) {
+
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
+        shoppingCart.setUserId(BaseContext.getCurrentId());
+
+        ShoppingCart targetCart = shoppingCartMapper.getByCondition(shoppingCart);
+        //如果number ==1，直接删除
+        if(targetCart.getNumber()==1){
+            shoppingCartMapper.deleteOne(shoppingCart);
+            return;
+        }else if(targetCart.getNumber()>1){
+            //如果number>1，update
+            targetCart.setNumber(targetCart.getNumber()-1);
+            shoppingCartMapper.updateNumber(targetCart);
+        }
+
+
+
+
+    }
+
+    /**
+     * 清空该用户的购物车
+     */
+    @Override
+    public void clean() {
+        shoppingCartMapper.cleanAll(BaseContext.getCurrentId());
     }
 }

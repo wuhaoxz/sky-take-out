@@ -4,6 +4,15 @@
 <mapper namespace="com.sky.mapper.ShoppingCartMapper">
 
 
+    <delete id="deleteOne">
+        delete from shopping_cart
+        where user_id = #{userId}
+        <if test="dishId!=null">and dish_id = #{dishId}</if>
+        <if test="setmealId!=null">and setmeal_id = #{setmealId}</if>
+        <if test="dishFlavor!=null">and dish_flavor = #{dishFlavor}</if>
+    </delete>
+
+
     <select id="getByCondition" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart
         <where>
