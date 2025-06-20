@@ -10,4 +10,8 @@ public interface AddressBookService {
     void save(AddressBook addressBook);
 
     void setDefault(AddressBook addressBook);
+
+
+
+    AddressBook getDefaultByUserId();
 }

@@ -53,4 +53,12 @@ public class AddressBookController {
 
 
 
+    @ApiOperation("查询默认地址")
+    @GetMapping("/default")
+    public Result<AddressBook> getDefault(){
+        AddressBook addressBook = addressBookService.getDefaultByUserId();
+        return Result.success(addressBook);
+    }
+
+
 }

@@ -22,4 +22,7 @@ public interface AddressBookMapper {
 
     @Update("update address_book set is_default = 1 where id = #{id}")
     void setDefaultById(Long id);
+
+    @Select("select * from address_book where user_id = #{userId} and is_default = 1")
+    AddressBook getDefaultByUserId(Long userId);
 }
