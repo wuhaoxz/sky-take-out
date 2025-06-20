@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -99,6 +100,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCartMapper.save(shoppingCart);
             return;
         }
+
+
+    }
+
+    @Override
+    public List<ShoppingCart> list() {
+
+        //获得当前请求的id
+        Long userId = BaseContext.getCurrentId();
+
+        List<ShoppingCart> list = shoppingCartMapper.list(userId);
+        return list;
 
 
     }
