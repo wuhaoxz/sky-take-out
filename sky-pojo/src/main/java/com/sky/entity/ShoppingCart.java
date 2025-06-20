@@ -40,7 +40,7 @@ public class ShoppingCart implements Serializable {
     //数量
     private Integer number;
 
-    //金额
+    //金额：单价
     private BigDecimal amount;
 
     //图片
