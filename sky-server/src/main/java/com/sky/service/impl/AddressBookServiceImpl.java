@@ -47,4 +47,19 @@ public class AddressBookServiceImpl implements AddressBookService {
 
 
     }
+
+    @Override
+    public void setDefault(AddressBook addressBook) {
+        Long id = addressBook.getId();
+        Long userId = BaseContext.getCurrentId();
+
+        //将该用户所有的地址信息的isDefault设置为0
+        addressBookMapper.setNotDefaultByUserId(userId);
+
+        //将当前id的isDefault设置为1
+        addressBookMapper.setDefaultById(id);
+
+
+
+    }
 }
