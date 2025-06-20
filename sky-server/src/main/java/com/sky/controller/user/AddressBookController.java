@@ -67,6 +67,12 @@ public class AddressBookController {
         return Result.success(addressBook);
     }
 
+    @ApiOperation("修改地址")
+    @PutMapping
+    public Result getById(@RequestBody AddressBook addressBook){
+        addressBookService.update(addressBook);
+        return Result.success();
+    }
 
 
 

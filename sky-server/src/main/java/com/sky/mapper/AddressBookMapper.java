@@ -28,4 +28,7 @@ public interface AddressBookMapper {
 
     @Select("select * from address_book where id = #{id}")
     AddressBook getById(Long id);
+
+
+    void update(AddressBook addressBook);
 }
