@@ -82,4 +82,9 @@ public class AddressBookServiceImpl implements AddressBookService {
     public void update(AddressBook addressBook) {
         addressBookMapper.update(addressBook);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        addressBookMapper.deleteById(id);
+    }
 }

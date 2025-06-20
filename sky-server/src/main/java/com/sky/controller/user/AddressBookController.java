@@ -7,6 +7,7 @@ import com.sky.service.AddressBookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +61,7 @@ public class AddressBookController {
         return Result.success(addressBook);
     }
 
-    @ApiOperation("根据地址Id查询地址")
+    @ApiOperation("根据Id查询地址")
     @GetMapping("/{id}")
     public Result<AddressBook> getById(@PathVariable Long id){
         AddressBook addressBook = addressBookService.getById(id);
@@ -74,6 +75,13 @@ public class AddressBookController {
         return Result.success();
     }
 
+
+    @ApiOperation("根据Id删除地址")
+    @DeleteMapping
+    public Result deleteById(Long id){
+        addressBookService.deleteById(id);
+        return Result.success();
+    }
 
 
 }
