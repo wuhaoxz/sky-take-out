@@ -39,7 +39,7 @@ public class OrderDetail implements Serializable {
     //数量
     private Integer number;
 
-    //金额
+    //金额：商品单价，即 xxx/份
     private BigDecimal amount;
 
     //图片

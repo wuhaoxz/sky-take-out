@@ -63,13 +63,13 @@ public class Orders implements Serializable {
     //支付状态 0未支付 1已支付 2退款
     private Integer payStatus;
 
-    //实收金额
+    //实收金额，订单总金额
     private BigDecimal amount;
 
     //备注
     private String remark;
 
-    //用户名
+    //下单人
     private String userName;
 
     //手机号
