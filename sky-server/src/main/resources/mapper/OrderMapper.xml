@@ -26,6 +26,12 @@
         update orders set pay_method = #{payMethod}, pay_status = 1, status = 2
         where number = #{orderNumber}
     </update>
+    <select id="page" resultType="com.sky.entity.Orders">
+
+    select * from orders where user_id = #{userId}
+    <if test="status!=null">and  status = #{status}</if>
+
+    </select>
 
 
 </mapper>

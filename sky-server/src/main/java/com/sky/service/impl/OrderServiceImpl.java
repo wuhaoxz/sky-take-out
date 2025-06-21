@@ -1,25 +1,29 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
 import com.sky.mapper.*;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderSubmitVO;
-import lombok.extern.slf4j.Slf4j;
+import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -118,5 +122,56 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.payment(ordersPaymentDTO);
 
+    }
+
+    @Override
+    public PageResult page(OrdersPageQueryDTO ordersPageQueryDTO) {
+
+        //查询orders表
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Orders orders = new Orders();
+        orders.setUserId(BaseContext.getCurrentId());//用户id
+        orders.setStatus(ordersPageQueryDTO.getStatus());//订单状态
+        Page<Orders> ordersList = orderMapper.page(orders);//指定用户的订单list
+
+
+
+        List<OrderVO> orderVOS = new ArrayList<>();
+
+
+        //ordersList
+        for (Orders ord : ordersList) {
+            OrderVO orderVO = new OrderVO();
+
+            //拷贝ord中的属性
+            BeanUtils.copyProperties(ord,orderVO);
+
+            //获得指定订单的订单明细list
+            Long orderId = ord.getId();
+            List<OrderDetail> details = orderDetailMapper.getByOrderId(orderId);
+            orderVO.setOrderDetailList(details);
+
+            //根据details得到所有菜品信息组装成字符串
+            List<String> collect = details.stream().map(new Function<OrderDetail, String>() {
+                @Override
+                public String apply(OrderDetail orderDetail) {
+                    if(orderDetail.getDishFlavor()!=null){
+                        return orderDetail.getName()+"(" + orderDetail.getDishFlavor() +")*"+ orderDetail.getNumber()+"; ";
+                    }
+                    return orderDetail.getName()+"*"+ orderDetail.getNumber()+"; ";
+                }
+            }).collect(Collectors.toList());
+            String orderDishesStr = String.join("", collect);
+            orderVO.setOrderDishes(orderDishesStr);
+
+            orderVOS.add(orderVO);
+        }
+
+        //封装返回对象
+        PageResult pageResult = new PageResult();
+        pageResult.setTotal(ordersList.getTotal());
+        pageResult.setRecords(orderVOS);
+
+        return pageResult;
     }
 }
