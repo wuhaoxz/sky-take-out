@@ -24,4 +24,7 @@ public interface OrderMapper {
     @Update("update orders set status=#{status},pay_status=#{payStatus},cancel_time = #{cancelTime}," +
             "cancel_reason=#{cancelReason} where id = #{id}")
     void cancel(Orders order);
+
+
+    Page<Orders> conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO);
 }

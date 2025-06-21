@@ -242,5 +242,54 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.cancel(order);
     }
 
+    @Override
+    public PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+
+        //查询orders表
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+
+        Page<Orders> ordersList = orderMapper.conditionSearch(ordersPageQueryDTO);//指定用户的订单list
+
+
+
+        List<OrderVO> orderVOS = new ArrayList<>();
+
+
+        //ordersList
+        for (Orders ord : ordersList) {
+            OrderVO orderVO = new OrderVO();
+
+            //拷贝ord中的属性
+            BeanUtils.copyProperties(ord,orderVO);
+
+            //获得指定订单的订单明细list
+            Long orderId = ord.getId();
+            List<OrderDetail> details = orderDetailMapper.getByOrderId(orderId);
+            orderVO.setOrderDetailList(details);
+
+            //根据details得到所有菜品信息组装成字符串
+            List<String> collect = details.stream().map(new Function<OrderDetail, String>() {
+                @Override
+                public String apply(OrderDetail orderDetail) {
+                    if(orderDetail.getDishFlavor()!=null){
+                        return orderDetail.getName()+"(" + orderDetail.getDishFlavor() +")*"+ orderDetail.getNumber()+"; ";
+                    }
+                    return orderDetail.getName()+"*"+ orderDetail.getNumber()+"; ";
+                }
+            }).collect(Collectors.toList());
+            String orderDishesStr = String.join("", collect);
+            orderVO.setOrderDishes(orderDishesStr);
+
+            orderVOS.add(orderVO);
+        }
+
+        //封装返回对象
+        PageResult pageResult = new PageResult();
+        pageResult.setTotal(ordersList.getTotal());
+        pageResult.setRecords(orderVOS);
+
+        return pageResult;
+    }
+
 
 }
