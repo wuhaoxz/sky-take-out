@@ -17,4 +17,7 @@ public interface OrderMapper {
 
 
     Page<Orders> page(Orders orders);
+
+    @Select("select * from orders where id = #{id}")
+    Orders getOrderById(Long id);
 }

@@ -5,6 +5,7 @@ import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 
 public interface OrderService {
     OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO);
@@ -12,4 +13,6 @@ public interface OrderService {
     void payment(OrdersPaymentDTO ordersPaymentDTO);
 
     PageResult page(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    OrderVO getOrderById(Long id);
 }
