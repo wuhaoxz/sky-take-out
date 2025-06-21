@@ -20,4 +20,12 @@
                         #{tablewareNumber}, #{tablewareStatus}
                         )
     </insert>
+
+
+    <update id="payment">
+        update orders set pay_method = #{payMethod}, pay_status = 1, status = 2
+        where number = #{orderNumber}
+    </update>
+
+
 </mapper>

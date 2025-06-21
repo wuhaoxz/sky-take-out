@@ -1,6 +1,7 @@
 package com.sky.service.impl;
 
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
 import com.sky.mapper.*;
@@ -110,5 +111,12 @@ public class OrderServiceImpl implements OrderService {
 
 
         return orderSubmitVO;
+    }
+
+    @Override
+    public void payment(OrdersPaymentDTO ordersPaymentDTO) {
+
+        orderMapper.payment(ordersPaymentDTO);
+
     }
 }
