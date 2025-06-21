@@ -36,4 +36,8 @@ public interface OrderMapper {
 
     @Update("update orders set status = 3 where id = #{id}")
     void confirm(Long id);
+
+    @Update("update orders set status = 6,rejection_reason =#{rejectionReason}," +
+            "cancel_reason=concat('商家取消：',#{rejectionReason}),cancel_time= now() where id = #{id}")
+    void rejection(Orders orders);
 }

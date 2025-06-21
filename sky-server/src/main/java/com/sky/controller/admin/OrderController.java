@@ -51,7 +51,12 @@ public class OrderController {
         return Result.success();
     }
 
-
+    @PutMapping("/rejection")
+    @ApiOperation("拒单")
+    public Result rejection(@RequestBody Orders orders){
+        orderService.rejection(orders);
+        return Result.success();
+    }
 
 
 

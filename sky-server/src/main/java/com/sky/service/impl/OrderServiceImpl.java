@@ -233,7 +233,7 @@ public class OrderServiceImpl implements OrderService {
             order.setStatus(6);
             order.setPayStatus(0);
         }
-        order.setCancelReason("用户手动取消");
+        order.setCancelReason("用户主动取消");
         order.setCancelTime(LocalDateTime.now());
 
         orderMapper.cancel(order);
@@ -309,6 +309,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void confirm(Long id) {
         orderMapper.confirm(id);
+    }
+
+    @Override
+    public void rejection(Orders orders) {
+        orderMapper.rejection(orders);
     }
 
 
