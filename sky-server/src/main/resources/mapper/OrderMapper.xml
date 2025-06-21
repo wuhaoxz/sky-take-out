@@ -23,7 +23,7 @@
 
 
     <update id="payment">
-        update orders set pay_method = #{payMethod}, pay_status = 1, status = 2
+        update orders set pay_method = #{payMethod}, pay_status = 1, status = 2,checkout_time = now()
         where number = #{orderNumber}
     </update>
 

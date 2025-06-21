@@ -40,4 +40,10 @@ public interface OrderMapper {
     @Update("update orders set status = 6,rejection_reason =#{rejectionReason}," +
             "cancel_reason=concat('商家取消：',#{rejectionReason}),cancel_time= now() where id = #{id}")
     void rejection(Orders orders);
+
+    @Update("update orders set status = 4 where id = #{id}")
+    void delivery(Long id);
+
+    @Update("update orders set status = 5,delivery_time=now() where id = #{id}")
+    void complete(Long id);
 }

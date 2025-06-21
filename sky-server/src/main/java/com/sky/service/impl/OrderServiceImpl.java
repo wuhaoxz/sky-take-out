@@ -316,5 +316,15 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.rejection(orders);
     }
 
+    @Override
+    public void delivery(Long id) {
+        orderMapper.delivery(id);
+    }
+
+    @Override
+    public void complete(Long id) {
+        orderMapper.complete(id);
+    }
+
 
 }
