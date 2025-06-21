@@ -7,6 +7,7 @@ import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.aspectj.apache.bcel.generic.IINC;
 
 @Mapper
 public interface OrderMapper {
@@ -27,4 +28,12 @@ public interface OrderMapper {
 
 
     Page<Orders> conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO);
+
+
+    @Select("select count(*) from orders where status=#{status}")
+    Integer countByStatus(Integer status);
+
+
+    @Update("update orders set status = 3 where id = #{id}")
+    void confirm(Long id);
 }
