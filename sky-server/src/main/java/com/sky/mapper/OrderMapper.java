@@ -20,4 +20,8 @@ public interface OrderMapper {
 
     @Select("select * from orders where id = #{id}")
     Orders getOrderById(Long id);
+
+    @Update("update orders set status=#{status},pay_status=#{payStatus},cancel_time = #{cancelTime}," +
+            "cancel_reason=#{cancelReason} where id = #{id}")
+    void cancel(Orders order);
 }

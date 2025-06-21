@@ -14,6 +14,7 @@ import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -207,9 +208,38 @@ public class OrderServiceImpl implements OrderService {
             shoppingCartList.add(cart);
         }
 
+
         shoppingCartMapper.saveBatch(shoppingCartList);
 
 
+    }
+
+
+
+    @Override
+    public void cancel(Long id) {
+        // //订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 7退款
+        // private Integer status;
+        // //支付状态 0未支付 1已支付 2退款
+        // private Integer payStatus;
+
+
+
+        //1.查询订单表
+        Orders order = orderMapper.getOrderById(id);
+        if(order.getPayStatus()==1){
+            //如果是已支付，则status=7，且payStatus=2
+            order.setStatus(7);
+            order.setPayStatus(2);
+        }else if(order.getPayStatus()==0){
+            //如果是未支付，则status=6，且payStatus=0
+            order.setStatus(6);
+            order.setPayStatus(0);
+        }
+        order.setCancelReason("用户手动取消");
+        order.setCancelTime(LocalDateTime.now());
+
+        orderMapper.cancel(order);
     }
 
 
