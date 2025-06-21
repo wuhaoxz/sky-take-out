@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface OrderDetailMapper {
 
-    void saveBatch(ArrayList<OrderDetail> listOrderDetail);
+    void saveBatch(List<OrderDetail> listOrderDetail);
 
     @Select("select * from order_detail where order_id = #{orderId}")
     List<OrderDetail> getByOrderId(Long orderId);

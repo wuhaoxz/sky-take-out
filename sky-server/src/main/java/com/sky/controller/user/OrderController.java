@@ -3,6 +3,7 @@ package com.sky.controller.user;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.mapper.OrderMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
@@ -61,5 +62,21 @@ public class OrderController {
         return Result.success(orderVO);
 
     }
+
+
+    /**
+     * 加入购物车即可
+     * @param id
+     * @return
+     */
+    @PostMapping("/repetition/{id}")
+    @ApiOperation("再来一单")
+    public Result repetition(@PathVariable Long id){
+
+        orderService.repetition(id);
+
+        return Result.success();
+    }
+
 
 }

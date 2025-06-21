@@ -53,7 +53,6 @@ public class OrderServiceImpl implements OrderService {
         Orders order = new Orders();
         //根据地址id查询地址信息
         String uuid = UUID.randomUUID().toString();
-        long millis = System.currentTimeMillis();
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         order.setNumber(format+"-"+uuid);//订单号
         order.setStatus(Orders.PENDING_PAYMENT); //订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 7退款
@@ -86,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
 
         //2.插入订单明细表
-        ArrayList<OrderDetail> listOrderDetail = new ArrayList<>();
+        List<OrderDetail> listOrderDetail = new ArrayList<>();
         //查询购物车表
         List<ShoppingCart> listCart = shoppingCartMapper.list(userId);
         listCart.forEach(cart->{
@@ -191,4 +190,27 @@ public class OrderServiceImpl implements OrderService {
 
         return orderVO;
     }
+
+    @Override
+    public void repetition(Long id) {
+        //从订单明细表中查询数据，并放入到购物车中，即可
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(id);
+
+        List<ShoppingCart> shoppingCartList = new ArrayList<>();
+
+        for (OrderDetail detail : orderDetailList) {
+            ShoppingCart cart = new ShoppingCart();
+            BeanUtils.copyProperties(detail,cart);
+            cart.setUserId(BaseContext.getCurrentId());
+            cart.setCreateTime(LocalDateTime.now());
+
+            shoppingCartList.add(cart);
+        }
+
+        shoppingCartMapper.saveBatch(shoppingCartList);
+
+
+    }
+
+
 }

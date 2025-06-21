@@ -15,4 +15,6 @@ public interface OrderService {
     PageResult page(OrdersPageQueryDTO ordersPageQueryDTO);
 
     OrderVO getOrderById(Long id);
+
+    void repetition(Long id);
 }
