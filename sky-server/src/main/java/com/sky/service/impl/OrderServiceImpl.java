@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -46,7 +48,9 @@ public class OrderServiceImpl implements OrderService {
         Orders order = new Orders();
         //根据地址id查询地址信息
         String uuid = UUID.randomUUID().toString();
-        order.setNumber(System.currentTimeMillis()+"_"+uuid);//订单号
+        long millis = System.currentTimeMillis();
+        String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        order.setNumber(format+"-"+uuid);//订单号
         order.setStatus(Orders.PENDING_PAYMENT); //订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 7退款
         order.setUserId(userId);
         order.setAddressBookId(ordersSubmitDTO.getAddressBookId());
