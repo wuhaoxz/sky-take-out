@@ -31,7 +31,7 @@ public class OrderTask {
      */
     @Scheduled(cron = "0 * * * * ?")
     public void handlingOverdueOrders(){
-        log.info("处理15分钟内未支付订单...");
+        log.info("定时任务处理15分钟内未支付订单...");
 
         LocalDateTime time = LocalDateTime.now();
         time = time.minusMinutes(15);

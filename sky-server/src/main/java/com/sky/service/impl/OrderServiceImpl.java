@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.context.BaseContext;
@@ -13,6 +14,7 @@ import com.sky.service.OrderService;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -21,14 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     @Autowired
     private OrderMapper orderMapper;
@@ -122,6 +125,19 @@ public class OrderServiceImpl implements OrderService {
     public void payment(OrdersPaymentDTO ordersPaymentDTO) {
 
         orderMapper.payment(ordersPaymentDTO);
+
+        //支付成功之后，使用websocket推送消息给客服端
+        Orders order = orderMapper.getOrderByNumber(ordersPaymentDTO.getOrderNumber());
+        // 约定服务端发送给客户端浏览器的数据格式为JSON，字段包括：type，orderId，content
+        //         - type 为消息类型，1为来单提醒 2为客户催单
+        //         - orderId 为订单id
+        //         - content 为消息内容
+        Map map = new HashMap();
+        map.put("type",1);//1表示来单提醒；2表示客户催单
+        map.put("orderId",order.getId());
+        map.put("content","订单号："+order.getNumber());
+        String jsonString = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(jsonString);
 
     }
 

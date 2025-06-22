@@ -53,4 +53,7 @@ public interface OrderMapper {
             "cancel_reason='超时未付款，自动取消'" +
             " where status = 1 and order_time<#{time}")
     void handlingOverdueOrders(LocalDateTime time);
+
+    @Select("select * from orders where number= #{orderNumber}")
+    Orders getOrderByNumber(String orderNumber);
 }
