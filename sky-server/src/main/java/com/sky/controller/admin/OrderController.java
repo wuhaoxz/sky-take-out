@@ -52,6 +52,15 @@ public class OrderController {
         return Result.success();
     }
 
+
+    @PutMapping("/cancel")
+    @ApiOperation("管理端取消订单")
+    public Result cancel(@RequestBody Orders orders){
+        orderService.cancelByAdmin(orders);
+        return Result.success();
+    }
+
+
     @PutMapping("/rejection")
     @ApiOperation("拒单")
     public Result rejection(@RequestBody Orders orders){

@@ -327,4 +327,29 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+
+    @Override
+    public void cancelByAdmin(Orders orders) {
+
+
+        //1.查询订单表
+        Orders order = orderMapper.getOrderById(orders.getId());
+        if(order.getPayStatus()==1){
+            //如果是已支付，则status=7，且payStatus=2
+            // order.setStatus(7);
+            order.setStatus(6);//订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
+            order.setPayStatus(2);//支付状态 0未支付 1已支付 2退款
+        }else if(order.getPayStatus()==0){
+            //如果是未支付，则status=6，且payStatus=0
+            order.setStatus(6);
+            order.setPayStatus(0);
+        }
+        order.setCancelTime(LocalDateTime.now());
+
+        order.setCancelReason("商家取消："+orders.getCancelReason());
+
+        orderMapper.cancel(order);
+    }
+
+
 }
