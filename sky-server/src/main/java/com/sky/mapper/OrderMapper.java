@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.aspectj.apache.bcel.generic.IINC;
 
+import java.time.LocalDateTime;
+
 @Mapper
 public interface OrderMapper {
     void save(Orders order);
@@ -46,4 +48,9 @@ public interface OrderMapper {
 
     @Update("update orders set status = 5,delivery_time=now() where id = #{id}")
     void complete(Long id);
+
+    @Update("update orders set status = 6,cancel_time=now()," +
+            "cancel_reason='超时未付款，自动取消'" +
+            " where status = 1 and order_time<#{time}")
+    void handlingOverdueOrders(LocalDateTime time);
 }

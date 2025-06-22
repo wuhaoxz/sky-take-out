@@ -33,7 +33,7 @@
 
     select * from orders where user_id = #{userId}
     <if test="status!=null">and  status = #{status}</if>
-
+    order by order_time desc
     </select>
 
 
@@ -48,7 +48,7 @@
             <if test="phone!=null">and phone like concat('%',#{phone},'%') </if>
             <if test="status!=null">and status = #{status}</if>
         </where>
-
+        order by order_time desc
 
     </select>
 
