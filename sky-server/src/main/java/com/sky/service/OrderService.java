@@ -35,4 +35,6 @@ public interface OrderService {
     void complete(Long id);
 
     void cancelByAdmin(Orders orders);
+
+    void reminder(Long id);
 }
