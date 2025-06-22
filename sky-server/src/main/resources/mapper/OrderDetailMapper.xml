@@ -22,7 +22,7 @@
         select order_detail.dish_id, sum(order_detail.number) dish_count
         from order_detail inner join orders
         on order_detail.order_id = orders.id
-        where orders.status = 5
+        where orders.status = 5 and orders.order_time &gt;=#{begin} and orders.order_time &lt;=#{end}
         group by order_detail.dish_id
         order by dish_count desc
         limit 10

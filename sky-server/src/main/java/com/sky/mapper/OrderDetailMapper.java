@@ -6,6 +6,8 @@ import com.sky.report.DishCount;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,5 +21,5 @@ public interface OrderDetailMapper {
     List<OrderDetail> getByOrderId(Long orderId);
 
 
-    List<DishCount> getTop10();
+    List<DishCount> getTop10(LocalDateTime begin, LocalDateTime end);
 }

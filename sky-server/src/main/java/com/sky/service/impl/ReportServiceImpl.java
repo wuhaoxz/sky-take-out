@@ -12,6 +12,9 @@ import com.sky.vo.SalesTop10ReportVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +31,14 @@ public class ReportServiceImpl implements ReportService {
     private DishMapper dishMapper;
 
     @Override
-    public SalesTop10ReportVO getTop10() {
+    public SalesTop10ReportVO getTop10(LocalDate begin, LocalDate end) {
 
         SalesTop10ReportVO top10vo = new SalesTop10ReportVO();
         //得到销量最高的10个菜品的dish_id和每个菜品的销量
-        List<DishCount> dishCountlist = orderDetailMapper.getTop10();
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+
+        List<DishCount> dishCountlist = orderDetailMapper.getTop10(beginTime,endTime);
 
         //List<GoodsSalesDTO>：菜品的名字和每个菜品的销量
         List<GoodsSalesDTO> goodsSalesDTOlist = new ArrayList<>();
