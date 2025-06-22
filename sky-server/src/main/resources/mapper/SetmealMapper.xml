@@ -28,7 +28,7 @@
 
 
     <select id="page" resultType="com.sky.vo.SetmealVO">
-        select s.*, c.name categoryName from setmeal s left join category c on s.category_id = c.id
+        select s.*, c.name category_name from setmeal s left join category c on s.category_id = c.id
         <where>
             <if test="name!=null">s.name like concat('%',#{name},'%')</if>
             <if test="status!=null">and s.status = #{status}</if>

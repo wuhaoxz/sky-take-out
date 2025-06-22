@@ -31,7 +31,7 @@
 
     <select id="page" resultType="com.sky.vo.DishVO">
 
-        select dish.*, category.name categoryName from dish left join category on dish.category_id = category.id
+        select dish.*, category.name category_name from dish left join category on dish.category_id = category.id
         <where>
             <if test="name!=null"> and dish.name like concat('%',#{name},'%')</if>
             <if test="status!=null"> and dish.status = #{status}</if>

@@ -17,5 +17,16 @@
 
 
 
+    <select id="getTop10" resultType="com.sky.report.DishCount">
+
+        select order_detail.dish_id, sum(order_detail.number) dish_count
+        from order_detail inner join orders
+        on order_detail.order_id = orders.id
+        where orders.status = 5
+        group by order_detail.dish_id
+        order by dish_count desc
+        limit 10
+    </select>
+
 
 </mapper>
