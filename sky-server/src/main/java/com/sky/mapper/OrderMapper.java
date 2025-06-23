@@ -58,5 +58,5 @@ public interface OrderMapper {
     @Select("select * from orders where number= #{orderNumber}")
     Orders getOrderByNumber(String orderNumber);
 
-    BigDecimal getAmountWithGeginAndEnd(LocalDateTime begin, LocalDateTime end);
+    BigDecimal getAmountWithBeginAndEnd(LocalDateTime begin, LocalDateTime end);
 }

@@ -53,7 +53,7 @@
     </select>
 
 
-    <select id="getAmountWithGeginAndEnd" resultType="java.math.BigDecimal">
+    <select id="getAmountWithBeginAndEnd" resultType="java.math.BigDecimal">
         select sum(amount)
         from orders
         where order_time &gt;= #{begin}

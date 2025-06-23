@@ -181,7 +181,7 @@ public class ReportServiceImpl implements ReportService {
         //2.计算每一天的销售总额
         ArrayList<BigDecimal> turnoverList = new ArrayList<>();
         for (int i = 0; i < timeList.size()-1; i++) {
-            BigDecimal amount = orderMapper.getAmountWithGeginAndEnd(timeList.get(i),timeList.get(i+1));
+            BigDecimal amount = orderMapper.getAmountWithBeginAndEnd(timeList.get(i),timeList.get(i+1));
             if(amount==null){
                 amount = new BigDecimal(0);
             }
@@ -189,7 +189,7 @@ public class ReportServiceImpl implements ReportService {
         }
 
         //2025-06-21T00:00~2025-06-22T00:00
-        BigDecimal total = orderMapper.getAmountWithGeginAndEnd(timeList.get(timeList.size()-1),timeList.get(timeList.size()-1).plusDays(1));
+        BigDecimal total = orderMapper.getAmountWithBeginAndEnd(timeList.get(timeList.size()-1),timeList.get(timeList.size()-1).plusDays(1));
         if(total==null){
             total = new BigDecimal(0);
         }
