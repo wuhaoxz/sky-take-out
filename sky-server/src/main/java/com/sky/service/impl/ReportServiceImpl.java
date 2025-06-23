@@ -4,15 +4,19 @@ import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Dish;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.OrderDetailMapper;
+import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.report.DishCount;
 import com.sky.service.ReportService;
+import com.sky.vo.BusinessDataVO;
 import com.sky.vo.SalesTop10ReportVO;
+import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -33,6 +37,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private OrderMapper orderMapper;
 
     @Override
     public SalesTop10ReportVO getTop10(LocalDate begin, LocalDate end) {
@@ -154,5 +161,70 @@ public class ReportServiceImpl implements ReportService {
 
 
         return userReportVO;
+    }
+
+    @Override
+    public TurnoverReportVO turnoverStatistics(LocalDate begin, LocalDate end) {
+
+
+        //1.获得从开始时间到结束时间的时间列表
+        ArrayList<LocalDateTime> timeList = new ArrayList<>();
+        int plusNnum = 0;
+        while(begin.plusDays(plusNnum).isBefore(end)){
+            LocalDateTime temp = LocalDateTime.of(begin.plusDays(plusNnum++), LocalTime.MIN);//.plusDays方法会返回新的对象
+            timeList.add(temp);
+        }
+        timeList.add(LocalDateTime.of(end, LocalTime.MIN));//手动补上end
+        // [2025-06-15T00:00, 2025-06-16T00:00, 2025-06-17T00:00, 2025-06-18T00:00, 2025-06-19T00:00, 2025-06-20T00:00, 2025-06-21T00:00]
+
+
+        //2.计算每一天的销售总额
+        ArrayList<BigDecimal> turnoverList = new ArrayList<>();
+        for (int i = 0; i < timeList.size()-1; i++) {
+            BigDecimal amount = orderMapper.getAmountWithGeginAndEnd(timeList.get(i),timeList.get(i+1));
+            if(amount==null){
+                amount = new BigDecimal(0);
+            }
+            turnoverList.add(amount);
+        }
+
+        //2025-06-21T00:00~2025-06-22T00:00
+        BigDecimal total = orderMapper.getAmountWithGeginAndEnd(timeList.get(timeList.size()-1),timeList.get(timeList.size()-1).plusDays(1));
+        if(total==null){
+            total = new BigDecimal(0);
+        }
+        turnoverList.add(total);//手动补上最后一天的销售额
+
+
+
+
+
+        //封装返回对象
+        TurnoverReportVO turnoverReportVO = new TurnoverReportVO();
+
+
+        List<String> collect1  = timeList.stream().map(new Function<LocalDateTime, String>() {
+            @Override
+            public String apply(LocalDateTime localDateTime) {
+
+                return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            }
+        }).collect(Collectors.toList());
+
+        String join1 = String.join(",", collect1);
+        turnoverReportVO.setDateList(join1);
+
+
+        List<String> collect2 = turnoverList.stream().map(new Function<BigDecimal, String>() {
+            @Override
+            public String apply(BigDecimal bigDecimal) {
+                return bigDecimal.doubleValue() + "";
+            }
+        }).collect(Collectors.toList());
+        String join2 = String.join(",", collect2);
+        turnoverReportVO.setTurnoverList(join2);
+
+
+        return turnoverReportVO;
     }
 }

@@ -53,4 +53,13 @@
     </select>
 
 
+    <select id="getAmountWithGeginAndEnd" resultType="java.math.BigDecimal">
+        select sum(amount)
+        from orders
+        where order_time &gt;= #{begin}
+        and order_time &lt; #{end}
+        and status = 5
+    </select>
+
+
 </mapper>

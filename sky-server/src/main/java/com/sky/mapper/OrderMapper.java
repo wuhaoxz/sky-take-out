@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.aspectj.apache.bcel.generic.IINC;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Mapper
@@ -56,4 +57,6 @@ public interface OrderMapper {
 
     @Select("select * from orders where number= #{orderNumber}")
     Orders getOrderByNumber(String orderNumber);
+
+    BigDecimal getAmountWithGeginAndEnd(LocalDateTime begin, LocalDateTime end);
 }
