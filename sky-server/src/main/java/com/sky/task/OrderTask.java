@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 /**
  * 自定义定时任务类
  */
-@Service
+@Component
 @Slf4j
 public class OrderTask {
 
