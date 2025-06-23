@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -35,12 +36,13 @@ public class ReportController {
         return Result.success(top10vo);
     }
 
-    // @GetMapping("userStatistics")
-    // @ApiOperation("用户统计接口")
-    // public Result userStatistics(LocalDateTime begin,LocalDateTime end){
-    //     // UserReportVO userReportVO = reportService.userStatistics();
-    //     return Result.success();
-    // }
+    @GetMapping("userStatistics")
+    @ApiOperation("用户统计接口")
+    public Result userStatistics(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+                                 @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end){
+        UserReportVO userReportVO = reportService.userStatistics(begin,end);
+        return Result.success(userReportVO);
+    }
 
 
 
