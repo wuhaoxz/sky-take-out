@@ -8,10 +8,7 @@ import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.report.DishCount;
 import com.sky.service.ReportService;
-import com.sky.vo.BusinessDataVO;
-import com.sky.vo.SalesTop10ReportVO;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
+import com.sky.vo.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -226,5 +223,120 @@ public class ReportServiceImpl implements ReportService {
 
 
         return turnoverReportVO;
+    }
+
+
+    /**
+     * 订单统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public OrderReportVO ordersStatistics(LocalDate begin, LocalDate end) {
+
+
+
+        //1.获得从开始时间到结束时间的时间列表
+        ArrayList<LocalDateTime> timeList = new ArrayList<>();
+        int plusNnum = 0;
+        while(begin.plusDays(plusNnum).isBefore(end)){
+            LocalDateTime temp = LocalDateTime.of(begin.plusDays(plusNnum++), LocalTime.MIN);//.plusDays方法会返回新的对象
+            timeList.add(temp);
+        }
+        timeList.add(LocalDateTime.of(end, LocalTime.MIN));//手动补上end
+        // [2025-06-15T00:00, 2025-06-16T00:00, 2025-06-17T00:00, 2025-06-18T00:00, 2025-06-19T00:00, 2025-06-20T00:00, 2025-06-21T00:00]
+
+
+        //2.每日订单数
+        ArrayList<Integer> totalOrderNumList = new ArrayList<>();
+        for (int i = 0; i < timeList.size()-1; i++) {
+            Integer integer = orderMapper.getTotalOrderNumWithBeginAndEnd(timeList.get(i),timeList.get(i+1));
+            if(integer==null){
+                integer = 0;
+            }
+            totalOrderNumList.add(integer);
+        }
+
+        //2025-06-21T00:00~2025-06-22T00:00
+        Integer integer = orderMapper.getTotalOrderNumWithBeginAndEnd(timeList.get(timeList.size()-1),timeList.get(timeList.size()-1).plusDays(1));
+        if(integer==null){
+            integer = 0;
+        }
+        totalOrderNumList.add(integer);//手动补上最后一天的订单数
+
+
+
+        //3.每日有效订单数
+        ArrayList<Integer> validOrderNumList = new ArrayList<>();
+        for (int i = 0; i < timeList.size()-1; i++) {
+            Integer integer1 = orderMapper.getValidOrderNumWithBeginAndEnd(timeList.get(i),timeList.get(i+1));
+            if(integer1==null){
+                integer1 = 0;
+            }
+            validOrderNumList.add(integer1);
+        }
+
+        //2025-06-21T00:00~2025-06-22T00:00
+        Integer integer1 = orderMapper.getValidOrderNumWithBeginAndEnd(timeList.get(timeList.size()-1),timeList.get(timeList.size()-1).plusDays(1));
+        if(integer1==null){
+            integer1 = 0;
+        }
+        validOrderNumList.add(integer1);//手动补上最后一天的订单数
+
+
+
+
+
+        //4.封装返回数据
+        OrderReportVO orderReportVO = new OrderReportVO();
+
+
+        List<String> collect1  = timeList.stream().map(new Function<LocalDateTime, String>() {
+            @Override
+            public String apply(LocalDateTime localDateTime) {
+
+                return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            }
+        }).collect(Collectors.toList());
+
+        String join1 = String.join(",", collect1);
+        orderReportVO.setDateList(join1);
+
+
+        List<String> collect2 = totalOrderNumList.stream().map(new Function<Integer, String>() {
+            @Override
+            public String apply(Integer integer) {
+                return integer+"";
+            }
+        }).collect(Collectors.toList());
+        String join2 = String.join(",", collect2);
+        orderReportVO.setOrderCountList(join2);
+
+
+
+        List<String> collect3 = validOrderNumList.stream().map(new Function<Integer, String>() {
+            @Override
+            public String apply(Integer integer) {
+                return integer+"";
+            }
+        }).collect(Collectors.toList());
+        String join3 = String.join(",", collect3);
+        orderReportVO.setValidOrderCountList(join3);
+
+
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);// xxxx-xx-xx 00:00
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);//xxxx-xx-xx 23:59:59.999999999
+
+
+        orderReportVO.setTotalOrderCount(orderMapper.getTotalOrderCount(beginTime,endTime));
+
+        orderReportVO.setValidOrderCount(orderMapper.getValidOrderCount(beginTime,endTime));
+
+
+        orderReportVO.setOrderCompletionRate(1.0*orderReportVO.getValidOrderCount()/orderReportVO.getTotalOrderCount());
+        
+
+        return orderReportVO;
     }
 }

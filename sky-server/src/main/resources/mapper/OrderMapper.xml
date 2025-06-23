@@ -62,4 +62,19 @@
     </select>
 
 
+    <select id="getTotalOrderNumWithBeginAndEnd" resultType="java.lang.Integer">
+        select count(*)
+        from orders
+        where order_time &gt;= #{begin}
+          and order_time &lt; #{end}
+    </select>
+    <select id="getValidOrderNumWithBeginAndEnd" resultType="java.lang.Integer">
+        select count(*)
+        from orders
+        where order_time &gt;= #{begin}
+          and order_time &lt; #{end}
+        and status = 5
+    </select>
+
+
 </mapper>

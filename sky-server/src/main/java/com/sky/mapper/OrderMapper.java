@@ -59,4 +59,14 @@ public interface OrderMapper {
     Orders getOrderByNumber(String orderNumber);
 
     BigDecimal getAmountWithBeginAndEnd(LocalDateTime begin, LocalDateTime end);
+
+    Integer getTotalOrderNumWithBeginAndEnd(LocalDateTime begin, LocalDateTime end);
+
+    Integer getValidOrderNumWithBeginAndEnd(LocalDateTime begin, LocalDateTime end);
+
+    @Select("select count(*) from orders where order_time >= #{begin} and order_time <= #{end}")
+    Integer getTotalOrderCount(LocalDateTime begin, LocalDateTime end);
+
+    @Select("select count(*) from orders where status = 5 and order_time >= #{begin} and order_time <= #{end}")
+    Integer getValidOrderCount(LocalDateTime begin, LocalDateTime end);
 }
